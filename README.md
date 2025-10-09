@@ -37,6 +37,40 @@ try {
 }
 ```
 
+### Parse Driver License
+```dart
+final driverLicense = [
+  'D1NLD11234567890ABCDEFGHIJKLM7'
+];
+
+final result = DriverLicenseParser.tryParse(driverLicense);
+
+// Alternatively use parse and catch MRZException descendants
+try {
+  final result = DriverLicenseParser.parse(driverLicense);
+  print(result.documentNumber); // 1234567890
+  print(result.countryCode); // NLD
+} on MRZException catch(e) {
+  print(e);
+}
+```
+
+## Benchmarks
+
+Performance benchmarks for parsing different MRZ formats:
+
+| Format | Type | Average Parse Time |
+|--------|------|-------------------|
+| TD3 | Passport | ~103.34 µs |
+| TD2 | ID Card | ~13.81 µs |
+| TD1 | ID Card | ~15.67 µs |
+| Driver License | Driver License | ~16.33 µs |
+
+Run benchmarks yourself:
+```bash
+dart run benchmark/mrz_parser_benchmark.dart
+```
+
 ## Authors
 * [Anna Domashych](https://github.com/foxanna/)
 * [Oleksandr Leuschenko](https://github.com/olexale/)
