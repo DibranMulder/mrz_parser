@@ -724,4 +724,74 @@ void main() {
       ),
     );
   });
+
+  group('Dutch passport O vs 0 edge case', () {
+    // Dutch passports never contain the digit '0' (zero), only the letter 'O'
+    // to avoid confusion. This test demonstrates that OCR errors reading 'O' as '0'
+    // cause check digit validation failures.
+    test(
+      'Dutch passport with O in document number should parse correctly',
+      () => expectResult(
+        input: [
+          'P<NLDDEVRIES<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<',
+          'NPOBR4N678NLD8501019M3012316<<<<<<<<<<<<<<08',
+        ],
+        expectedOutput: MRZResult(
+          documentType: 'P',
+          countryCode: 'NLD',
+          surnames: 'DEVRIES',
+          givenNames: 'JAN',
+          documentNumber: 'NPOBR4N67',
+          nationalityCountryCode: 'NLD',
+          birthDate: DateTime(1985, 01, 01),
+          sex: Sex.male,
+          expiryDate: DateTime(2030, 12, 31),
+          personalNumber: '',
+        ),
+      ),
+    );
+
+    test(
+      'Dutch passport with OCR error (0 instead of O) currently fails - documents the bug',
+      () {
+        // This MRZ has '0' (zero) instead of 'O' in position 3 of document number
+        // NP0BR4N67 instead of NPOBR4N67
+        // The check digit (8) is correct for NPOBR4N67, but wrong for NP0BR4N67
+        final result = MRZParser.tryParse([
+          'P<NLDDEVRIES<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<',
+          'NP0BR4N678NLD8501019M3012316<<<<<<<<<<<<<<08',
+        ]);
+
+        // Currently this returns null because the library doesn't auto-correct document numbers
+        expect(result, isNull, reason: 'Library does not auto-correct 0 to O in document numbers');
+      },
+    );
+
+    test(
+      'Dutch passport with OCR error (0 instead of O) should auto-correct - THIS TEST FAILS',
+      () {
+        // This test demonstrates the missing functionality
+        // The library SHOULD auto-correct '0' to 'O' in Dutch passport numbers
+        // because Dutch passports never contain the digit '0'
+        expectResult(
+          input: [
+            'P<NLDDEVRIES<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<',
+            'NP0BR4N678NLD8501019M3012316<<<<<<<<<<<<<<08',
+          ],
+          expectedOutput: MRZResult(
+            documentType: 'P',
+            countryCode: 'NLD',
+            surnames: 'DEVRIES',
+            givenNames: 'JAN',
+            documentNumber: 'NPOBR4N67', // Should be corrected from NP0BR4N67 to NPOBR4N67
+            nationalityCountryCode: 'NLD',
+            birthDate: DateTime(1985, 01, 01),
+            sex: Sex.male,
+            expiryDate: DateTime(2030, 12, 31),
+            personalNumber: '',
+          ),
+        );
+      },
+    );
+  });
 }
