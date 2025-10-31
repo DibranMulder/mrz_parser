@@ -39,7 +39,7 @@ class _TD3MRZFormatParser {
     final countryCodeFixed =
         MRZFieldRecognitionDefectsFixer.fixCountryCode(countryCodeRaw);
     final namesFixed = MRZFieldRecognitionDefectsFixer.fixNames(namesRaw);
-    final documentNumberFixed = documentNumberRaw;
+    var documentNumberFixed = documentNumberRaw;
     final documentNumberCheckDigitFixed =
         MRZFieldRecognitionDefectsFixer.fixCheckDigit(
       documentNumberCheckDigitRaw,
@@ -65,8 +65,35 @@ class _TD3MRZFormatParser {
         ? MRZFieldRecognitionDefectsFixer.fixCheckDigit(finalCheckDigitRaw)
         : null;
 
-    final documentNumberIsValid = int.tryParse(documentNumberCheckDigitFixed) ==
+    var documentNumberIsValid = int.tryParse(documentNumberCheckDigitFixed) ==
         MRZCheckDigitCalculator.getCheckDigit(documentNumberFixed);
+
+    // If check digit doesn't match, try common OCR errors: O <-> 0
+    if (!documentNumberIsValid) {
+      // Try replacing 'O' with '0'
+      if (documentNumberFixed.contains('O')) {
+        final documentNumberCorrected = documentNumberFixed.replaceAll('O', '0');
+        final correctedIsValid = int.tryParse(documentNumberCheckDigitFixed) ==
+            MRZCheckDigitCalculator.getCheckDigit(documentNumberCorrected);
+
+        if (correctedIsValid) {
+          documentNumberFixed = documentNumberCorrected;
+          documentNumberIsValid = true;
+        }
+      }
+
+      // Try replacing '0' with 'O' if still not valid
+      if (!documentNumberIsValid && documentNumberFixed.contains('0')) {
+        final documentNumberCorrected = documentNumberFixed.replaceAll('0', 'O');
+        final correctedIsValid = int.tryParse(documentNumberCheckDigitFixed) ==
+            MRZCheckDigitCalculator.getCheckDigit(documentNumberCorrected);
+
+        if (correctedIsValid) {
+          documentNumberFixed = documentNumberCorrected;
+          documentNumberIsValid = true;
+        }
+      }
+    }
 
     if (!documentNumberIsValid) {
       throw const InvalidDocumentNumberException();
