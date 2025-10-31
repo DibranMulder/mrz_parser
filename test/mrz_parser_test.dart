@@ -724,4 +724,115 @@ void main() {
       ),
     );
   });
+
+  group('Dutch passport O vs 0 edge case', () {
+    // Dutch passports never contain the digit '0' (zero), only the letter 'O'
+    // to avoid confusion. This test demonstrates that OCR errors reading 'O' as '0'
+    // cause check digit validation failures.
+    test(
+      'Dutch passport with O in document number should parse correctly',
+      () => expectResult(
+        input: [
+          'P<NLDDEVRIES<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<',
+          'NPOBR4N678NLD8501019M3012316<<<<<<<<<<<<<<08',
+        ],
+        expectedOutput: MRZResult(
+          documentType: 'P',
+          countryCode: 'NLD',
+          surnames: 'DEVRIES',
+          givenNames: 'JAN',
+          documentNumber: 'NPOBR4N67',
+          nationalityCountryCode: 'NLD',
+          birthDate: DateTime(1985, 01, 01),
+          sex: Sex.male,
+          expiryDate: DateTime(2030, 12, 31),
+          personalNumber: '',
+        ),
+      ),
+    );
+
+    test(
+      'Dutch passport with OCR error (0 instead of O) should auto-correct with tryParse',
+      () {
+        // This MRZ has '0' (zero) instead of 'O' in position 3 of document number
+        // NP0BR4N67 instead of NPOBR4N67
+        // The check digit (8) is correct for NPOBR4N67, but wrong for NP0BR4N67
+        final result = MRZParser.tryParse([
+          'P<NLDDEVRIES<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<',
+          'NP0BR4N678NLD8501019M3012316<<<<<<<<<<<<<<08',
+        ]);
+
+        // The library now auto-corrects '0' to 'O' in document numbers
+        expect(result, isNotNull);
+        expect(result!.documentNumber, 'NPOBR4N67');
+      },
+    );
+
+    test(
+      'Dutch passport with OCR error (0 instead of O) should auto-correct',
+      () {
+        // This test demonstrates the missing functionality
+        // The library SHOULD auto-correct '0' to 'O' in Dutch passport numbers
+        // because Dutch passports never contain the digit '0'
+        expectResult(
+          input: [
+            'P<NLDDEVRIES<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<',
+            'NP0BR4N678NLD8501019M3012316<<<<<<<<<<<<<<08',
+          ],
+          expectedOutput: MRZResult(
+            documentType: 'P',
+            countryCode: 'NLD',
+            surnames: 'DEVRIES',
+            givenNames: 'JAN',
+            documentNumber: 'NPOBR4N67', // Should be corrected from NP0BR4N67 to NPOBR4N67
+            nationalityCountryCode: 'NLD',
+            birthDate: DateTime(1985, 01, 01),
+            sex: Sex.male,
+            expiryDate: DateTime(2030, 12, 31),
+            personalNumber: '',
+          ),
+        );
+      },
+    );
+
+    test(
+      'Document number with O instead of 0 should auto-correct',
+      () {
+        // Test the opposite case: O should be corrected to 0
+        // Based on the standard ERIKSSON example with '0' replaced by 'O'
+        expectResult(
+          input: [
+            'P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<',
+            'L8989O2C36UTO7408122F1204159ZE184226B<<<<<10',
+          ],
+          expectedOutput: MRZResult(
+            documentType: 'P',
+            countryCode: 'UTO',
+            surnames: 'ERIKSSON',
+            givenNames: 'ANNA MARIA',
+            documentNumber: 'L898902C3', // Should be corrected from L8989O2C3 to L898902C3
+            nationalityCountryCode: 'UTO',
+            birthDate: DateTime(1974, 08, 12),
+            sex: Sex.female,
+            expiryDate: DateTime(2012, 04, 15),
+            personalNumber: 'ZE184226B',
+          ),
+        );
+      },
+    );
+
+    test(
+      'Document number with invalid check digit should still fail after O/0 correction attempts',
+      () {
+        // Test that we still throw exception when neither O->0 nor 0->O fixes the check digit
+        expect(
+          () => MRZParser.parse([
+            'P<NLDDEVRIES<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<',
+            'NP0BR4N679NLD8501019M3012316<<<<<<<<<<<<<<08', // Wrong check digit (9 instead of 8)
+          ]),
+          throwsA(isA<InvalidDocumentNumberException>()),
+        );
+      },
+    );
+  });
 }
