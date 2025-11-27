@@ -1,1 +1,1 @@
-part of 'mrz_passport_parser.dart';
+part of 'passport_mrz_parser.dart';

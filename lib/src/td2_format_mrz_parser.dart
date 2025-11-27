@@ -1,7 +1,7 @@
-part of 'mrz_passport_parser.dart';
+part of 'passport_mrz_parser.dart';
 
-class _TD2MRZFormatParser {
-  _TD2MRZFormatParser._();
+class _TD2MrzFormatParser {
+  _TD2MrzFormatParser._();
 
   static const _linesLength = 36;
   static const _linesCount = 2;
@@ -99,16 +99,16 @@ class _TD2MRZFormatParser {
       }
     }
 
-    final documentType = MRZFieldParser.parseDocumentType(documentTypeFixed);
-    final countryCode = MRZFieldParser.parseCountryCode(countryCodeFixed);
-    final names = MRZFieldParser.parseNames(namesFixed);
+    final documentType = MrzFieldParser.parseDocumentType(documentTypeFixed);
+    final countryCode = MrzFieldParser.parseCountryCode(countryCodeFixed);
+    final names = MrzFieldParser.parseNames(namesFixed);
     final documentNumber =
-        MRZFieldParser.parseDocumentNumber(documentNumberFixed);
-    final nationality = MRZFieldParser.parseNationality(nationalityFixed);
-    final birthDate = MRZFieldParser.parseBirthDate(birthDateFixed);
-    final sex = MRZFieldParser.parseSex(sexFixed);
-    final expiryDate = MRZFieldParser.parseExpiryDate(expiryDateFixed);
-    final optionalData = MRZFieldParser.parseOptionalData(optionalDataFixed);
+        MrzFieldParser.parseDocumentNumber(documentNumberFixed);
+    final nationality = MrzFieldParser.parseNationality(nationalityFixed);
+    final birthDate = MrzFieldParser.parseBirthDate(birthDateFixed);
+    final sex = MrzFieldParser.parseSex(sexFixed);
+    final expiryDate = MrzFieldParser.parseExpiryDate(expiryDateFixed);
+    final optionalData = MrzFieldParser.parseOptionalData(optionalDataFixed);
 
     return PassportMrzResult(
       documentType: documentType,
@@ -198,22 +198,22 @@ class _TD2MRZFormatParser {
       throw const InvalidMrzValueException();
     }
 
-    final documentType = MRZFieldParser.parseDocumentType(documentTypeFixed);
-    final countryCode = MRZFieldParser.parseCountryCode(countryCodeFixed);
-    final givenNames = MRZFieldParser.parseNames(givenNamesFixed)
+    final documentType = MrzFieldParser.parseDocumentType(documentTypeFixed);
+    final countryCode = MrzFieldParser.parseCountryCode(countryCodeFixed);
+    final givenNames = MrzFieldParser.parseNames(givenNamesFixed)
         .where((element) => element.isNotEmpty)
         .toList()
         .join(' ');
-    final lastNames = MRZFieldParser.parseNames(lastNamesFixed)
+    final lastNames = MrzFieldParser.parseNames(lastNamesFixed)
         .where((element) => element.isNotEmpty)
         .toList()
         .join(' ');
     final documentNumber =
-        MRZFieldParser.parseDocumentNumber(documentNumberFixed);
-    final nationality = MRZFieldParser.parseNationality(countryCodeFixed);
-    final birthDate = MRZFieldParser.parseBirthDate(birthDateFixed);
-    final sex = MRZFieldParser.parseSex(sexFixed);
-    final issueDate = MRZFieldParser.parseExpiryDate('${issueDateFixed}01');
+        MrzFieldParser.parseDocumentNumber(documentNumberFixed);
+    final nationality = MrzFieldParser.parseNationality(countryCodeFixed);
+    final birthDate = MrzFieldParser.parseBirthDate(birthDateFixed);
+    final sex = MrzFieldParser.parseSex(sexFixed);
+    final issueDate = MrzFieldParser.parseExpiryDate('${issueDateFixed}01');
     final yearsValid = issueDate.isBefore(DateTime(2014))
         ? 10
         : birthDate.isBefore(
@@ -224,8 +224,8 @@ class _TD2MRZFormatParser {
     final expiryDate =
         DateTime(issueDate.year + yearsValid, issueDate.month, issueDate.day);
     final optionalData =
-        MRZFieldParser.parseOptionalData(departmentAndOfficeFixed);
-    final optionalData2 = MRZFieldParser.parseOptionalData(departmentFixed);
+        MrzFieldParser.parseOptionalData(departmentAndOfficeFixed);
+    final optionalData2 = MrzFieldParser.parseOptionalData(departmentFixed);
 
     return PassportMrzResult(
       documentType: documentType,

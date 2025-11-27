@@ -28,14 +28,14 @@ class PassportMrzParser extends MrzParser<PassportMrzResult> {
       throw const InvalidMrzInputException();
     }
 
-    if (_TD1MRZFormatParser.isValidInput(polishedInput)) {
-      return _TD1MRZFormatParser.parse(polishedInput);
+    if (_TD1MrzFormatParser.isValidInput(polishedInput)) {
+      return _TD1MrzFormatParser.parse(polishedInput);
     }
-    if (_TD2MRZFormatParser.isValidInput(polishedInput)) {
-      return _TD2MRZFormatParser.parse(polishedInput);
+    if (_TD2MrzFormatParser.isValidInput(polishedInput)) {
+      return _TD2MrzFormatParser.parse(polishedInput);
     }
-    if (_TD3MRZFormatParser.isValidInput(polishedInput)) {
-      return _TD3MRZFormatParser.parse(polishedInput);
+    if (_TD3MrzFormatParser.isValidInput(polishedInput)) {
+      return _TD3MrzFormatParser.parse(polishedInput);
     }
 
     throw const InvalidMrzInputException();

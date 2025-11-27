@@ -1,7 +1,7 @@
-part of 'mrz_passport_parser.dart';
+part of 'passport_mrz_parser.dart';
 
-class MRZFieldParser {
-  MRZFieldParser._();
+class MrzFieldParser {
+  MrzFieldParser._();
 
   static String parseDocumentNumber(String input) => _trim(input);
 

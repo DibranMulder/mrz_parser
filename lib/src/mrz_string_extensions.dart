@@ -1,6 +1,6 @@
-part of 'mrz_passport_parser.dart';
+part of 'passport_mrz_parser.dart';
 
-extension _MRZStringExtensions on String {
+extension _MrzStringExtensions on String {
   static final _validInput = RegExp(r'^[A-Z|0-9|<]+$');
 
   bool get isValidMRZInput => _validInput.hasMatch(this);

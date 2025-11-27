@@ -94,13 +94,13 @@ class _DrivingLicenceMRZFormatParser {
       throw const InvalidDocumentNumberException();
     }
 
-    final documentType = MRZFieldParser.parseDocumentType(documentTypeFixed);
-    final configuration = MRZFieldParser.parseDocumentType(configurationFixed);
-    final countryCode = MRZFieldParser.parseCountryCode(countryCodeFixed);
+    final documentType = MrzFieldParser.parseDocumentType(documentTypeFixed);
+    final configuration = MrzFieldParser.parseDocumentType(configurationFixed);
+    final countryCode = MrzFieldParser.parseCountryCode(countryCodeFixed);
     final version = versionFixed;
     final documentNumber =
-        MRZFieldParser.parseDocumentNumber(documentNumberFixed);
-    final randomData = MRZFieldParser.parseOptionalData(randomDataFixed);
+        MrzFieldParser.parseDocumentNumber(documentNumberFixed);
+    final randomData = MrzFieldParser.parseOptionalData(randomDataFixed);
 
     return DrivingLicenceMrzResult(
       documentType: documentType,
