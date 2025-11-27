@@ -1,7 +1,7 @@
-part of 'mrz_parser.dart';
+part of 'mrz_passport_parser.dart';
 
-class MRZFieldRecognitionDefectsFixer {
-  MRZFieldRecognitionDefectsFixer._();
+class MrzFieldRecognitionDefectsFixer {
+  MrzFieldRecognitionDefectsFixer._();
 
   static String fixDocumentType(String input) =>
       input.replaceSimilarDigitsWithLetters();

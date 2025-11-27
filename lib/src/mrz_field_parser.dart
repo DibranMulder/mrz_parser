@@ -1,4 +1,4 @@
-part of 'mrz_parser.dart';
+part of 'mrz_passport_parser.dart';
 
 class MRZFieldParser {
   MRZFieldParser._();

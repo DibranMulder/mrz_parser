@@ -1,4 +1,4 @@
-part of 'mrz_parser.dart';
+part of 'mrz_passport_parser.dart';
 
 class _TD2MRZFormatParser {
   _TD2MRZFormatParser._();
@@ -10,9 +10,9 @@ class _TD2MRZFormatParser {
       input.length == _linesCount &&
       input.every((s) => s.length == _linesLength);
 
-  static MRZResult parse(List<String> input) {
+  static PassportMrzResult parse(List<String> input) {
     if (!isValidInput(input)) {
-      throw const InvalidMRZInputException();
+      throw const InvalidMrzInputException();
     }
 
     if (_isFrenchId(input)) {
@@ -38,29 +38,29 @@ class _TD2MRZFormatParser {
     final finalCheckDigitRaw = isVisaDocument ? null : secondLine.substring(35);
 
     final documentTypeFixed =
-        MRZFieldRecognitionDefectsFixer.fixDocumentType(documentTypeRaw);
+        MrzFieldRecognitionDefectsFixer.fixDocumentType(documentTypeRaw);
     final countryCodeFixed =
-        MRZFieldRecognitionDefectsFixer.fixCountryCode(countryCodeRaw);
-    final namesFixed = MRZFieldRecognitionDefectsFixer.fixNames(namesRaw);
+        MrzFieldRecognitionDefectsFixer.fixCountryCode(countryCodeRaw);
+    final namesFixed = MrzFieldRecognitionDefectsFixer.fixNames(namesRaw);
     final documentNumberFixed = documentNumberRaw;
     final documentNumberCheckDigitFixed =
-        MRZFieldRecognitionDefectsFixer.fixCheckDigit(
+        MrzFieldRecognitionDefectsFixer.fixCheckDigit(
       documentNumberCheckDigitRaw,
     );
     final nationalityFixed =
-        MRZFieldRecognitionDefectsFixer.fixNationality(nationalityRaw);
+        MrzFieldRecognitionDefectsFixer.fixNationality(nationalityRaw);
     final birthDateFixed =
-        MRZFieldRecognitionDefectsFixer.fixDate(birthDateRaw);
+        MrzFieldRecognitionDefectsFixer.fixDate(birthDateRaw);
     final birthDateCheckDigitFixed =
-        MRZFieldRecognitionDefectsFixer.fixCheckDigit(birthDateCheckDigitRaw);
-    final sexFixed = MRZFieldRecognitionDefectsFixer.fixSex(sexRaw);
+        MrzFieldRecognitionDefectsFixer.fixCheckDigit(birthDateCheckDigitRaw);
+    final sexFixed = MrzFieldRecognitionDefectsFixer.fixSex(sexRaw);
     final expiryDateFixed =
-        MRZFieldRecognitionDefectsFixer.fixDate(expiryDateRaw);
+        MrzFieldRecognitionDefectsFixer.fixDate(expiryDateRaw);
     final expiryDateCheckDigitFixed =
-        MRZFieldRecognitionDefectsFixer.fixCheckDigit(expiryDateCheckDigitRaw);
+        MrzFieldRecognitionDefectsFixer.fixCheckDigit(expiryDateCheckDigitRaw);
     final optionalDataFixed = optionalDataRaw;
     final finalCheckDigitFixed = finalCheckDigitRaw != null
-        ? MRZFieldRecognitionDefectsFixer.fixCheckDigit(finalCheckDigitRaw)
+        ? MrzFieldRecognitionDefectsFixer.fixCheckDigit(finalCheckDigitRaw)
         : null;
 
     final documentNumberIsValid = int.tryParse(documentNumberCheckDigitFixed) ==
@@ -95,7 +95,7 @@ class _TD2MRZFormatParser {
           MRZCheckDigitCalculator.getCheckDigit(finalCheckStringFixed);
 
       if (!finalCheckStringIsValid) {
-        throw const InvalidMRZValueException();
+        throw const InvalidMrzValueException();
       }
     }
 
@@ -110,7 +110,7 @@ class _TD2MRZFormatParser {
     final expiryDate = MRZFieldParser.parseExpiryDate(expiryDateFixed);
     final optionalData = MRZFieldParser.parseOptionalData(optionalDataFixed);
 
-    return MRZResult(
+    return PassportMrzResult(
       documentType: documentType,
       countryCode: countryCode,
       surnames: names[0],
@@ -127,7 +127,7 @@ class _TD2MRZFormatParser {
   static bool _isFrenchId(List<String> input) =>
       input[0][0] == 'I' && input[0].substring(2, 5) == 'FRA';
 
-  static MRZResult _parseFrenchId(List<String> input) {
+  static PassportMrzResult _parseFrenchId(List<String> input) {
     final firstLine = input[0];
     final secondLine = input[1];
 
@@ -147,29 +147,29 @@ class _TD2MRZFormatParser {
     final finalCheckDigitRaw = secondLine.substring(35);
 
     final documentTypeFixed =
-        MRZFieldRecognitionDefectsFixer.fixDocumentType(documentTypeRaw);
+        MrzFieldRecognitionDefectsFixer.fixDocumentType(documentTypeRaw);
     final countryCodeFixed =
-        MRZFieldRecognitionDefectsFixer.fixCountryCode(countryCodeRaw);
+        MrzFieldRecognitionDefectsFixer.fixCountryCode(countryCodeRaw);
     final lastNamesFixed =
-        MRZFieldRecognitionDefectsFixer.fixNames(lastNamesRaw);
+        MrzFieldRecognitionDefectsFixer.fixNames(lastNamesRaw);
     final departmentAndOfficeFixed = departmentAndOfficeRaw;
     final issueDateFixed =
-        MRZFieldRecognitionDefectsFixer.fixDate(issueDateRaw);
+        MrzFieldRecognitionDefectsFixer.fixDate(issueDateRaw);
     final departmentFixed = departmentRaw;
     final documentNumberFixed = documentNumberRaw;
     final documentNumberCheckDigitFixed =
-        MRZFieldRecognitionDefectsFixer.fixCheckDigit(
+        MrzFieldRecognitionDefectsFixer.fixCheckDigit(
       documentNumberCheckDigitRaw,
     );
     final givenNamesFixed =
-        MRZFieldRecognitionDefectsFixer.fixNames(givenNamesRaw);
+        MrzFieldRecognitionDefectsFixer.fixNames(givenNamesRaw);
     final birthDateFixed =
-        MRZFieldRecognitionDefectsFixer.fixDate(birthDateRaw);
+        MrzFieldRecognitionDefectsFixer.fixDate(birthDateRaw);
     final birthDateCheckDigitFixed =
-        MRZFieldRecognitionDefectsFixer.fixCheckDigit(birthDateCheckDigitRaw);
-    final sexFixed = MRZFieldRecognitionDefectsFixer.fixSex(sexRaw);
+        MrzFieldRecognitionDefectsFixer.fixCheckDigit(birthDateCheckDigitRaw);
+    final sexFixed = MrzFieldRecognitionDefectsFixer.fixSex(sexRaw);
     final finalCheckDigitFixed =
-        MRZFieldRecognitionDefectsFixer.fixCheckDigit(finalCheckDigitRaw);
+        MrzFieldRecognitionDefectsFixer.fixCheckDigit(finalCheckDigitRaw);
 
     final documentNumberIsValid = int.tryParse(documentNumberCheckDigitFixed) ==
         MRZCheckDigitCalculator.getCheckDigit(documentNumberFixed);
@@ -195,7 +195,7 @@ class _TD2MRZFormatParser {
         MRZCheckDigitCalculator.getCheckDigit(finalCheckStringFixed);
 
     if (!finalCheckStringIsValid) {
-      throw const InvalidMRZValueException();
+      throw const InvalidMrzValueException();
     }
 
     final documentType = MRZFieldParser.parseDocumentType(documentTypeFixed);
@@ -227,7 +227,7 @@ class _TD2MRZFormatParser {
         MRZFieldParser.parseOptionalData(departmentAndOfficeFixed);
     final optionalData2 = MRZFieldParser.parseOptionalData(departmentFixed);
 
-    return MRZResult(
+    return PassportMrzResult(
       documentType: documentType,
       countryCode: countryCode,
       surnames: lastNames,

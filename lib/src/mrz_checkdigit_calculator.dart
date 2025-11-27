@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-part of 'mrz_parser.dart';
+part of 'mrz_passport_parser.dart';
 
 class MRZCheckDigitCalculator {
   MRZCheckDigitCalculator._();
