@@ -14,7 +14,7 @@ class TD3ParseBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    MRZParser.tryParse(mrz);
+    PassportMrzParser().tryParse(mrz);
   }
 }
 
@@ -29,7 +29,7 @@ class TD2ParseBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    MRZParser.tryParse(mrz);
+    PassportMrzParser().tryParse(mrz);
   }
 }
 
@@ -45,7 +45,7 @@ class TD1ParseBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    MRZParser.tryParse(mrz);
+    PassportMrzParser().tryParse(mrz);
   }
 }
 
@@ -59,7 +59,7 @@ class DriverLicenseParseBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    DriverLicenseParser.tryParse(mrz);
+    DrivingLicenceMrzParser().tryParse(mrz);
   }
 }
 

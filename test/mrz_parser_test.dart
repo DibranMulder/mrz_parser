@@ -4,32 +4,32 @@ import 'package:test/test.dart';
 void main() {
   void expectResult({
     List<String?>? input,
-    MRZResult? expectedOutput,
+    PassportMrzResult? expectedOutput,
   }) =>
-      expect(MRZParser.parse(input), expectedOutput);
+      expect(PassportMrzParser().parse(input), expectedOutput);
 
   void expectException<T>({List<String?>? input}) =>
-      expect(() => MRZParser.parse(input), throwsA(isA<T>()));
+      expect(() => PassportMrzParser().parse(input), throwsA(isA<T>()));
 
-  group('invalid input throws $InvalidMRZInputException', () {
+  group('invalid input throws $InvalidMrzInputException', () {
     test(
       'null input',
-      () => expectException<InvalidMRZInputException>(),
+      () => expectException<InvalidMrzInputException>(),
     );
 
     test(
       '1-line null input',
-      () => expectException<InvalidMRZInputException>(input: [null]),
+      () => expectException<InvalidMrzInputException>(input: [null]),
     );
 
     test(
       '1-line input',
-      () => expectException<InvalidMRZInputException>(input: ['0123456789']),
+      () => expectException<InvalidMrzInputException>(input: ['0123456789']),
     );
 
     test(
       '4-lines input',
-      () => expectException<InvalidMRZInputException>(
+      () => expectException<InvalidMrzInputException>(
         input: [
           '0123456789',
           '0123456789',
@@ -40,7 +40,7 @@ void main() {
     );
     test(
       '3-lines input with 10 symbols',
-      () => expectException<InvalidMRZInputException>(
+      () => expectException<InvalidMrzInputException>(
         input: [
           '0123456789',
           '0123456789',
@@ -51,7 +51,7 @@ void main() {
 
     test(
       '3-lines input with 40 symbols',
-      () => expectException<InvalidMRZInputException>(
+      () => expectException<InvalidMrzInputException>(
         input: [
           '0123456789012345678901234567890123456789',
           '0123456789012345678901234567890123456789',
@@ -62,7 +62,7 @@ void main() {
 
     test(
       '2-lines input with 10 symbols',
-      () => expectException<InvalidMRZInputException>(
+      () => expectException<InvalidMrzInputException>(
         input: [
           '0123456789',
           '0123456789',
@@ -72,7 +72,7 @@ void main() {
 
     test(
       '2-lines input with 40 symbols',
-      () => expectException<InvalidMRZInputException>(
+      () => expectException<InvalidMrzInputException>(
         input: [
           '0123456789012345678901234567890123456789',
           '0123456789012345678901234567890123456789',
@@ -82,7 +82,7 @@ void main() {
 
     test(
       '2-lines input with 50 symbols',
-      () => expectException<InvalidMRZInputException>(
+      () => expectException<InvalidMrzInputException>(
         input: [
           '01234567890123456789012345678901234567890123456789',
           '01234567890123456789012345678901234567890123456789',
@@ -92,7 +92,7 @@ void main() {
 
     test(
       '2-lines input with 36 invalid symbols',
-      () => expectException<InvalidMRZInputException>(
+      () => expectException<InvalidMrzInputException>(
         input: [
           '012345678901234567890123456789!asdfg',
           '012345678901234567890123456789{}>,.?',
@@ -102,7 +102,7 @@ void main() {
 
     test(
       '2-lines input with 44 invalid symbols',
-      () => expectException<InvalidMRZInputException>(
+      () => expectException<InvalidMrzInputException>(
         input: [
           '01234567890123456789012345678901234567!asdfg',
           '01234567890123456789012345678901234567{}>,.?',
@@ -112,7 +112,7 @@ void main() {
 
     test(
       '3-lines input with 30 invalid symbols',
-      () => expectException<InvalidMRZInputException>(
+      () => expectException<InvalidMrzInputException>(
         input: [
           '012345678901234567890123!asdfg',
           '012345678901234567890123{}>,.?',
@@ -130,7 +130,7 @@ void main() {
           '8703145M1701027SWE<<<<<<<<<<<8',
           'SPECIMEN<<SVEN<<<<<<<<<<<<<<<<',
         ],
-        expectedOutput: MRZResult(
+        expectedOutput: PassportMrzResult(
           documentType: 'I',
           countryCode: 'SWE',
           surnames: 'SPECIMEN',
@@ -153,7 +153,7 @@ void main() {
           '1301014F2311207UT0130101987390',
           'SPECIMEN<<SPECIMEN<<<<<<<<<<<<',
         ],
-        expectedOutput: MRZResult(
+        expectedOutput: PassportMrzResult(
           documentType: 'ID',
           countryCode: 'BEL',
           surnames: 'SPECIMEN',
@@ -203,8 +203,8 @@ void main() {
     );
 
     test(
-      'final check digit does not match throws $InvalidMRZValueException',
-      () => expectException<InvalidMRZValueException>(
+      'final check digit does not match throws $InvalidMrzValueException',
+      () => expectException<InvalidMrzValueException>(
         input: [
           'I<SWE59000002<8198703142391<<<',
           '8703145M1701027SWE<<<<<<<<<<<0',
@@ -222,7 +222,7 @@ void main() {
           'P<D<<MUSTERMANN<<ERIKA<<<<<<<<<<<<<<',
           'C01X00T478D<<6408125F2702283<<<<<<<4',
         ],
-        expectedOutput: MRZResult(
+        expectedOutput: PassportMrzResult(
           documentType: 'P',
           countryCode: 'D',
           surnames: 'MUSTERMANN',
@@ -244,7 +244,7 @@ void main() {
           'P<D<<MUSTERMANN<<ERIKA<<<<<<<<<<<<<<',
           'C01X00<<<6D<<6408125F2702283<<<<<<<8',
         ],
-        expectedOutput: MRZResult(
+        expectedOutput: PassportMrzResult(
           documentType: 'P',
           countryCode: 'D',
           surnames: 'MUSTERMANN',
@@ -290,8 +290,8 @@ void main() {
     );
 
     test(
-      'final check digit does not match throws $InvalidMRZValueException',
-      () => expectException<InvalidMRZValueException>(
+      'final check digit does not match throws $InvalidMrzValueException',
+      () => expectException<InvalidMrzValueException>(
         input: [
           'P<D<<MUSTERMANN<<ERIKA<<<<<<<<<<<<<<',
           'C01X00T478D<<6408125F2702283<<<<<<<0',
@@ -308,7 +308,7 @@ void main() {
           'VCFINMEIKAELAEINEN<<MATTI<<<<<<<<<<<',
           '0005467<<2RUS7001017M1111019<M901101',
         ],
-        expectedOutput: MRZResult(
+        expectedOutput: PassportMrzResult(
           documentType: 'VC',
           countryCode: 'FIN',
           surnames: 'MEIKAELAEINEN',
@@ -362,7 +362,7 @@ void main() {
           'P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<',
           'L898902C36UTO7408122F1204159ZE184226B<<<<<10',
         ],
-        expectedOutput: MRZResult(
+        expectedOutput: PassportMrzResult(
           documentType: 'P',
           countryCode: 'UTO',
           surnames: 'ERIKSSON',
@@ -384,7 +384,7 @@ void main() {
           'P<AUSMCCABE<<NICOLE<SANDRA<<<<<<<<<<<<<<<<<<',
           'L4041765<4AUS8211169F1305218<<<<<<<<<<<<<<00',
         ],
-        expectedOutput: MRZResult(
+        expectedOutput: PassportMrzResult(
           documentType: 'P',
           countryCode: 'AUS',
           surnames: 'MCCABE',
@@ -406,7 +406,7 @@ void main() {
           'I<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<',
           'D231458907UTO7408122F1204159<<<<<<<<<<<<<<<6',
         ],
-        expectedOutput: MRZResult(
+        expectedOutput: PassportMrzResult(
           documentType: 'I',
           countryCode: 'UTO',
           surnames: 'ERIKSSON',
@@ -462,8 +462,8 @@ void main() {
     );
 
     test(
-      'final check digit does not match throws $InvalidMRZValueException',
-      () => expectException<InvalidMRZValueException>(
+      'final check digit does not match throws $InvalidMrzValueException',
+      () => expectException<InvalidMrzValueException>(
         input: [
           'P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<',
           'L898902C36UTO7408122F1204159ZE184226B<<<<<19',
@@ -480,7 +480,7 @@ void main() {
           'VNUSATRAVELER<<HAPPY<<<<<<<<<<<<<<<<<<<<<<<<',
           '12345678<8KOR5001013F1304071B3SE000IL4243934',
         ],
-        expectedOutput: MRZResult(
+        expectedOutput: PassportMrzResult(
           documentType: 'VN',
           countryCode: 'USA',
           surnames: 'TRAVELER',
@@ -534,7 +534,7 @@ void main() {
           'IDFRABERTHIER<<<<<<<<<<<<<<<<<<<<<<<',
           '8806923102858CORINNE<<<<<<<6512068F6',
         ],
-        expectedOutput: MRZResult(
+        expectedOutput: PassportMrzResult(
           documentType: 'ID',
           countryCode: 'FRA',
           surnames: 'BERTHIER',
@@ -557,7 +557,7 @@ void main() {
           'IDFRABERTHIER<<<<<<<<<<<<<<<<<923255',
           '8806923102858CORINNE<<<<<<<6512068F2',
         ],
-        expectedOutput: MRZResult(
+        expectedOutput: PassportMrzResult(
           documentType: 'ID',
           countryCode: 'FRA',
           surnames: 'BERTHIER',
@@ -580,7 +580,7 @@ void main() {
           'IDFRALOISEAU<<<<<<<<<<<<<<<<<<<<<<<<',
           '970675K002774HERVE<<DJAMEL<7303216M4',
         ],
-        expectedOutput: MRZResult(
+        expectedOutput: PassportMrzResult(
           documentType: 'ID',
           countryCode: 'FRA',
           surnames: 'LOISEAU',
@@ -603,7 +603,7 @@ void main() {
           'IDFRABERTHIER<<<<<<<<<<<<<<<<<<<<<<<',
           '8806923102858CORINNE<<<<<<<6512068F6',
         ],
-        expectedOutput: MRZResult(
+        expectedOutput: PassportMrzResult(
           documentType: 'ID',
           countryCode: 'FRA',
           surnames: 'BERTHIER',
@@ -626,7 +626,7 @@ void main() {
           'IDFRABERTHIER<<<<<<<<<<<<<<<<<<<<<<<',
           '1506923102850CORINNE<<<<<<<6512068F2',
         ],
-        expectedOutput: MRZResult(
+        expectedOutput: PassportMrzResult(
           documentType: 'ID',
           countryCode: 'FRA',
           surnames: 'BERTHIER',
@@ -649,7 +649,7 @@ void main() {
           'IDFRABERTHIER<<<<<<<<<<<<<<<<<<<<<<<',
           '1506923102850CORINNE<<<<<<<0012061F6',
         ],
-        expectedOutput: MRZResult(
+        expectedOutput: PassportMrzResult(
           documentType: 'ID',
           countryCode: 'FRA',
           surnames: 'BERTHIER',
@@ -686,8 +686,8 @@ void main() {
     );
 
     test(
-      'final check digit does not match throws $InvalidMRZValueException',
-      () => expectException<InvalidMRZValueException>(
+      'final check digit does not match throws $InvalidMrzValueException',
+      () => expectException<InvalidMrzValueException>(
         input: [
           'IDFRABERTHIER<<<<<<<<<<<<<<<<<<<<<<<',
           '8806923102858CORINNE<<<<<<<6512068F0',
@@ -699,17 +699,17 @@ void main() {
   group('tryParse', () {
     test(
       'invalid input returns null',
-      () => expect(MRZParser.tryParse(null), null),
+      () => expect(PassportMrzParser().tryParse(null), null),
     );
 
     test(
       'correct input parses',
       () => expect(
-        MRZParser.tryParse([
+        PassportMrzParser().tryParse([
           'VNUSATRAVELER<<HAPPY<<<<<<<<<<<<<<<<<<<<<<<<',
           '12345678<8KOR5001013F1304071B3SE000IL4243934',
         ]),
-        MRZResult(
+        PassportMrzResult(
           documentType: 'VN',
           countryCode: 'USA',
           surnames: 'TRAVELER',
@@ -736,7 +736,7 @@ void main() {
           'P<NLDDEVRIES<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<',
           'NPOBR4N678NLD8501019M3012316<<<<<<<<<<<<<<08',
         ],
-        expectedOutput: MRZResult(
+        expectedOutput: PassportMrzResult(
           documentType: 'P',
           countryCode: 'NLD',
           surnames: 'DEVRIES',
@@ -757,7 +757,7 @@ void main() {
         // This MRZ has '0' (zero) instead of 'O' in position 3 of document number
         // NP0BR4N67 instead of NPOBR4N67
         // The check digit (8) is correct for NPOBR4N67, but wrong for NP0BR4N67
-        final result = MRZParser.tryParse([
+        final result = PassportMrzParser().tryParse([
           'P<NLDDEVRIES<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<',
           'NP0BR4N678NLD8501019M3012316<<<<<<<<<<<<<<08',
         ]);
@@ -779,12 +779,13 @@ void main() {
             'P<NLDDEVRIES<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<',
             'NP0BR4N678NLD8501019M3012316<<<<<<<<<<<<<<08',
           ],
-          expectedOutput: MRZResult(
+          expectedOutput: PassportMrzResult(
             documentType: 'P',
             countryCode: 'NLD',
             surnames: 'DEVRIES',
             givenNames: 'JAN',
-            documentNumber: 'NPOBR4N67', // Should be corrected from NP0BR4N67 to NPOBR4N67
+            documentNumber:
+                'NPOBR4N67', // Should be corrected from NP0BR4N67 to NPOBR4N67
             nationalityCountryCode: 'NLD',
             birthDate: DateTime(1985, 01, 01),
             sex: Sex.male,
@@ -805,12 +806,13 @@ void main() {
             'P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<',
             'L8989O2C36UTO7408122F1204159ZE184226B<<<<<10',
           ],
-          expectedOutput: MRZResult(
+          expectedOutput: PassportMrzResult(
             documentType: 'P',
             countryCode: 'UTO',
             surnames: 'ERIKSSON',
             givenNames: 'ANNA MARIA',
-            documentNumber: 'L898902C3', // Should be corrected from L8989O2C3 to L898902C3
+            documentNumber:
+                'L898902C3', // Should be corrected from L8989O2C3 to L898902C3
             nationalityCountryCode: 'UTO',
             birthDate: DateTime(1974, 08, 12),
             sex: Sex.female,
@@ -826,7 +828,7 @@ void main() {
       () {
         // Test that we still throw exception when neither O->0 nor 0->O fixes the check digit
         expect(
-          () => MRZParser.parse([
+          () => PassportMrzParser().parse([
             'P<NLDDEVRIES<<JAN<<<<<<<<<<<<<<<<<<<<<<<<<<<',
             'NP0BR4N679NLD8501019M3012316<<<<<<<<<<<<<<08', // Wrong check digit (9 instead of 8)
           ]),

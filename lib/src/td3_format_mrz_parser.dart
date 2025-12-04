@@ -1,7 +1,7 @@
-part of 'mrz_parser.dart';
+part of 'passport_mrz_parser.dart';
 
-class _TD3MRZFormatParser {
-  _TD3MRZFormatParser._();
+class _TD3MrzFormatParser {
+  _TD3MrzFormatParser._();
 
   static const _linesLength = 44;
   static const _linesCount = 2;
@@ -10,9 +10,9 @@ class _TD3MRZFormatParser {
       input.length == _linesCount &&
       input.every((s) => s.length == _linesLength);
 
-  static MRZResult parse(List<String> input) {
+  static PassportMrzResult parse(List<String> input) {
     if (!isValidInput(input)) {
-      throw const InvalidMRZInputException();
+      throw const InvalidMrzInputException();
     }
 
     final firstLine = input[0];
@@ -35,34 +35,34 @@ class _TD3MRZFormatParser {
     final finalCheckDigitRaw = isVisaDocument ? null : secondLine.substring(43);
 
     final documentTypeFixed =
-        MRZFieldRecognitionDefectsFixer.fixDocumentType(documentTypeRaw);
+        MrzFieldRecognitionDefectsFixer.fixDocumentType(documentTypeRaw);
     final countryCodeFixed =
-        MRZFieldRecognitionDefectsFixer.fixCountryCode(countryCodeRaw);
-    final namesFixed = MRZFieldRecognitionDefectsFixer.fixNames(namesRaw);
+        MrzFieldRecognitionDefectsFixer.fixCountryCode(countryCodeRaw);
+    final namesFixed = MrzFieldRecognitionDefectsFixer.fixNames(namesRaw);
     var documentNumberFixed = documentNumberRaw;
     final documentNumberCheckDigitFixed =
-        MRZFieldRecognitionDefectsFixer.fixCheckDigit(
+        MrzFieldRecognitionDefectsFixer.fixCheckDigit(
       documentNumberCheckDigitRaw,
     );
     final nationalityFixed =
-        MRZFieldRecognitionDefectsFixer.fixNationality(nationalityRaw);
+        MrzFieldRecognitionDefectsFixer.fixNationality(nationalityRaw);
     final birthDateFixed =
-        MRZFieldRecognitionDefectsFixer.fixDate(birthDateRaw);
+        MrzFieldRecognitionDefectsFixer.fixDate(birthDateRaw);
     final birthDateCheckDigitFixed =
-        MRZFieldRecognitionDefectsFixer.fixCheckDigit(birthDateCheckDigitRaw);
-    final sexFixed = MRZFieldRecognitionDefectsFixer.fixSex(sexRaw);
+        MrzFieldRecognitionDefectsFixer.fixCheckDigit(birthDateCheckDigitRaw);
+    final sexFixed = MrzFieldRecognitionDefectsFixer.fixSex(sexRaw);
     final expiryDateFixed =
-        MRZFieldRecognitionDefectsFixer.fixDate(expiryDateRaw);
+        MrzFieldRecognitionDefectsFixer.fixDate(expiryDateRaw);
     final expiryDateCheckDigitFixed =
-        MRZFieldRecognitionDefectsFixer.fixCheckDigit(expiryDateCheckDigitRaw);
+        MrzFieldRecognitionDefectsFixer.fixCheckDigit(expiryDateCheckDigitRaw);
     final optionalDataFixed = optionalDataRaw;
     final optionalDataCheckDigitFixed = optionalDataCheckDigitRaw != null
-        ? MRZFieldRecognitionDefectsFixer.fixCheckDigit(
+        ? MrzFieldRecognitionDefectsFixer.fixCheckDigit(
             optionalDataCheckDigitRaw,
           )
         : null;
     final finalCheckDigitFixed = finalCheckDigitRaw != null
-        ? MRZFieldRecognitionDefectsFixer.fixCheckDigit(finalCheckDigitRaw)
+        ? MrzFieldRecognitionDefectsFixer.fixCheckDigit(finalCheckDigitRaw)
         : null;
 
     var documentNumberIsValid = int.tryParse(documentNumberCheckDigitFixed) ==
@@ -72,7 +72,8 @@ class _TD3MRZFormatParser {
     if (!documentNumberIsValid) {
       // Try replacing 'O' with '0'
       if (documentNumberFixed.contains('O')) {
-        final documentNumberCorrected = documentNumberFixed.replaceAll('O', '0');
+        final documentNumberCorrected =
+            documentNumberFixed.replaceAll('O', '0');
         final correctedIsValid = int.tryParse(documentNumberCheckDigitFixed) ==
             MRZCheckDigitCalculator.getCheckDigit(documentNumberCorrected);
 
@@ -84,7 +85,8 @@ class _TD3MRZFormatParser {
 
       // Try replacing '0' with 'O' if still not valid
       if (!documentNumberIsValid && documentNumberFixed.contains('0')) {
-        final documentNumberCorrected = documentNumberFixed.replaceAll('0', 'O');
+        final documentNumberCorrected =
+            documentNumberFixed.replaceAll('0', 'O');
         final correctedIsValid = int.tryParse(documentNumberCheckDigitFixed) ==
             MRZCheckDigitCalculator.getCheckDigit(documentNumberCorrected);
 
@@ -117,7 +119,7 @@ class _TD3MRZFormatParser {
       final optionalDataIsValid = (int.tryParse(optionalDataCheckDigitFixed) ==
               MRZCheckDigitCalculator.getCheckDigit(optionalDataFixed)) ||
           ((optionalDataCheckDigitFixed == '<') &&
-              MRZFieldParser.parseOptionalData(optionalDataFixed).isEmpty);
+              MrzFieldParser.parseOptionalData(optionalDataFixed).isEmpty);
 
       if (!optionalDataIsValid) {
         throw const InvalidOptionalDataException();
@@ -135,22 +137,22 @@ class _TD3MRZFormatParser {
           MRZCheckDigitCalculator.getCheckDigit(finalCheckStringFixed);
 
       if (!finalCheckStringIsValid) {
-        throw const InvalidMRZValueException();
+        throw const InvalidMrzValueException();
       }
     }
 
-    final documentType = MRZFieldParser.parseDocumentType(documentTypeFixed);
-    final countryCode = MRZFieldParser.parseCountryCode(countryCodeFixed);
-    final names = MRZFieldParser.parseNames(namesFixed);
+    final documentType = MrzFieldParser.parseDocumentType(documentTypeFixed);
+    final countryCode = MrzFieldParser.parseCountryCode(countryCodeFixed);
+    final names = MrzFieldParser.parseNames(namesFixed);
     final documentNumber =
-        MRZFieldParser.parseDocumentNumber(documentNumberFixed);
-    final nationality = MRZFieldParser.parseNationality(nationalityFixed);
-    final birthDate = MRZFieldParser.parseBirthDate(birthDateFixed);
-    final sex = MRZFieldParser.parseSex(sexFixed);
-    final expiryDate = MRZFieldParser.parseExpiryDate(expiryDateFixed);
-    final optionalData = MRZFieldParser.parseOptionalData(optionalDataFixed);
+        MrzFieldParser.parseDocumentNumber(documentNumberFixed);
+    final nationality = MrzFieldParser.parseNationality(nationalityFixed);
+    final birthDate = MrzFieldParser.parseBirthDate(birthDateFixed);
+    final sex = MrzFieldParser.parseSex(sexFixed);
+    final expiryDate = MrzFieldParser.parseExpiryDate(expiryDateFixed);
+    final optionalData = MrzFieldParser.parseOptionalData(optionalDataFixed);
 
-    return MRZResult(
+    return PassportMrzResult(
       documentType: documentType,
       countryCode: countryCode,
       surnames: names[0],

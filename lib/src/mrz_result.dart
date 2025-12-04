@@ -1,7 +1,11 @@
 enum Sex { none, male, female }
 
-class MRZResult {
-  const MRZResult({
+class MrzResult {
+  const MrzResult();
+}
+
+class PassportMrzResult extends MrzResult {
+  const PassportMrzResult({
     required this.documentType,
     required this.countryCode,
     required this.surnames,
@@ -30,7 +34,7 @@ class MRZResult {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is MRZResult &&
+      other is PassportMrzResult &&
           runtimeType == other.runtimeType &&
           documentType == other.documentType &&
           countryCode == other.countryCode &&
@@ -57,4 +61,43 @@ class MRZResult {
       expiryDate.hashCode ^
       personalNumber.hashCode ^
       personalNumber2.hashCode;
+}
+
+class DrivingLicenceMrzResult extends MrzResult {
+  const DrivingLicenceMrzResult({
+    required this.documentType,
+    required this.configuration,
+    required this.countryCode,
+    required this.version,
+    required this.documentNumber,
+    required this.randomData,
+  });
+
+  final String documentType;
+  final String configuration;
+  final String countryCode;
+  final String version;
+  final String documentNumber;
+  final String randomData;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DrivingLicenceMrzResult &&
+          runtimeType == other.runtimeType &&
+          documentType == other.documentType &&
+          configuration == other.configuration &&
+          countryCode == other.countryCode &&
+          version == other.version &&
+          documentNumber == other.documentNumber &&
+          randomData == other.randomData;
+
+  @override
+  int get hashCode =>
+      documentType.hashCode ^
+      configuration.hashCode ^
+      countryCode.hashCode ^
+      version.hashCode ^
+      documentNumber.hashCode ^
+      randomData.hashCode;
 }

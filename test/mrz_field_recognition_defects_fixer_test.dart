@@ -3,54 +3,54 @@ import 'package:test/test.dart';
 
 void main() {
   test('fixes document type', () {
-    expect(MRZFieldRecognitionDefectsFixer.fixDocumentType('V'), 'V');
-    expect(MRZFieldRecognitionDefectsFixer.fixDocumentType('P<<'), 'P<<');
-    expect(MRZFieldRecognitionDefectsFixer.fixDocumentType('0128'), 'OIZB');
-    expect(MRZFieldRecognitionDefectsFixer.fixDocumentType('<'), '<');
+    expect(MrzFieldRecognitionDefectsFixer.fixDocumentType('V'), 'V');
+    expect(MrzFieldRecognitionDefectsFixer.fixDocumentType('P<<'), 'P<<');
+    expect(MrzFieldRecognitionDefectsFixer.fixDocumentType('0128'), 'OIZB');
+    expect(MrzFieldRecognitionDefectsFixer.fixDocumentType('<'), '<');
   });
 
   test('fixes check digit', () {
-    expect(MRZFieldRecognitionDefectsFixer.fixCheckDigit('8'), '8');
-    expect(MRZFieldRecognitionDefectsFixer.fixCheckDigit('<6<'), '<6<');
-    expect(MRZFieldRecognitionDefectsFixer.fixCheckDigit('0QUDIZB'), '0000128');
-    expect(MRZFieldRecognitionDefectsFixer.fixCheckDigit('<'), '<');
+    expect(MrzFieldRecognitionDefectsFixer.fixCheckDigit('8'), '8');
+    expect(MrzFieldRecognitionDefectsFixer.fixCheckDigit('<6<'), '<6<');
+    expect(MrzFieldRecognitionDefectsFixer.fixCheckDigit('0QUDIZB'), '0000128');
+    expect(MrzFieldRecognitionDefectsFixer.fixCheckDigit('<'), '<');
   });
 
   test('fixes date', () {
-    expect(MRZFieldRecognitionDefectsFixer.fixDate('190213'), '190213');
-    expect(MRZFieldRecognitionDefectsFixer.fixDate('19021<'), '19021<');
-    expect(MRZFieldRecognitionDefectsFixer.fixDate('0QUDIZB'), '0000128');
-    expect(MRZFieldRecognitionDefectsFixer.fixDate('<'), '<');
+    expect(MrzFieldRecognitionDefectsFixer.fixDate('190213'), '190213');
+    expect(MrzFieldRecognitionDefectsFixer.fixDate('19021<'), '19021<');
+    expect(MrzFieldRecognitionDefectsFixer.fixDate('0QUDIZB'), '0000128');
+    expect(MrzFieldRecognitionDefectsFixer.fixDate('<'), '<');
   });
 
   test('fixes sex', () {
-    expect(MRZFieldRecognitionDefectsFixer.fixSex('M'), 'M');
-    expect(MRZFieldRecognitionDefectsFixer.fixSex('F'), 'F');
-    expect(MRZFieldRecognitionDefectsFixer.fixSex('P'), 'F');
-    expect(MRZFieldRecognitionDefectsFixer.fixSex('<'), '<');
+    expect(MrzFieldRecognitionDefectsFixer.fixSex('M'), 'M');
+    expect(MrzFieldRecognitionDefectsFixer.fixSex('F'), 'F');
+    expect(MrzFieldRecognitionDefectsFixer.fixSex('P'), 'F');
+    expect(MrzFieldRecognitionDefectsFixer.fixSex('<'), '<');
   });
 
   test('fixes country code', () {
-    expect(MRZFieldRecognitionDefectsFixer.fixCountryCode('UA'), 'UA');
-    expect(MRZFieldRecognitionDefectsFixer.fixCountryCode('D<<'), 'D<<');
-    expect(MRZFieldRecognitionDefectsFixer.fixCountryCode('0128'), 'OIZB');
-    expect(MRZFieldRecognitionDefectsFixer.fixCountryCode('<'), '<');
+    expect(MrzFieldRecognitionDefectsFixer.fixCountryCode('UA'), 'UA');
+    expect(MrzFieldRecognitionDefectsFixer.fixCountryCode('D<<'), 'D<<');
+    expect(MrzFieldRecognitionDefectsFixer.fixCountryCode('0128'), 'OIZB');
+    expect(MrzFieldRecognitionDefectsFixer.fixCountryCode('<'), '<');
   });
 
   test('fixes names', () {
     expect(
-      MRZFieldRecognitionDefectsFixer.fixNames('<SURNAME<<'),
+      MrzFieldRecognitionDefectsFixer.fixNames('<SURNAME<<'),
       '<SURNAME<<',
     );
-    expect(MRZFieldRecognitionDefectsFixer.fixNames('D<<'), 'D<<');
-    expect(MRZFieldRecognitionDefectsFixer.fixNames('0128'), 'OIZB');
-    expect(MRZFieldRecognitionDefectsFixer.fixNames('<'), '<');
+    expect(MrzFieldRecognitionDefectsFixer.fixNames('D<<'), 'D<<');
+    expect(MrzFieldRecognitionDefectsFixer.fixNames('0128'), 'OIZB');
+    expect(MrzFieldRecognitionDefectsFixer.fixNames('<'), '<');
   });
 
   test('fixes nationality', () {
-    expect(MRZFieldRecognitionDefectsFixer.fixNationality('UA'), 'UA');
-    expect(MRZFieldRecognitionDefectsFixer.fixNationality('D<<'), 'D<<');
-    expect(MRZFieldRecognitionDefectsFixer.fixNationality('0128'), 'OIZB');
-    expect(MRZFieldRecognitionDefectsFixer.fixNationality('<'), '<');
+    expect(MrzFieldRecognitionDefectsFixer.fixNationality('UA'), 'UA');
+    expect(MrzFieldRecognitionDefectsFixer.fixNationality('D<<'), 'D<<');
+    expect(MrzFieldRecognitionDefectsFixer.fixNationality('0128'), 'OIZB');
+    expect(MrzFieldRecognitionDefectsFixer.fixNationality('<'), '<');
   });
 }
