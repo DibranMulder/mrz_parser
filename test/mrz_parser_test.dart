@@ -743,7 +743,7 @@ void main() {
           givenNames: 'JAN',
           documentNumber: 'NPOBR4N67',
           nationalityCountryCode: 'NLD',
-          birthDate: DateTime(1985, 01, 01),
+          birthDate: DateTime(1985),
           sex: Sex.male,
           expiryDate: DateTime(2030, 12, 31),
           personalNumber: '',
@@ -787,7 +787,7 @@ void main() {
             documentNumber:
                 'NPOBR4N67', // Should be corrected from NP0BR4N67 to NPOBR4N67
             nationalityCountryCode: 'NLD',
-            birthDate: DateTime(1985, 01, 01),
+            birthDate: DateTime(1985),
             sex: Sex.male,
             expiryDate: DateTime(2030, 12, 31),
             personalNumber: '',
